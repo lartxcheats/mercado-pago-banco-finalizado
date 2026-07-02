@@ -2,6 +2,12 @@
 const balanceAmount = document.querySelector('.balance-amount');
 const eyeBtn = document.querySelector('.eye-btn');
 const currency = document.querySelector('.currency');
+
+// Sai se não está na página certa
+if (!balanceAmount || !eyeBtn || !currency) {
+    throw new Error('mp.js: elementos não encontrados, página ignorada');
+}
+
 let isHidden = false;
 let savedValue = localStorage.getItem('mp_saldo') || '0,00';
 
