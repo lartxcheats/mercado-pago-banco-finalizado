@@ -117,14 +117,6 @@
     </div>
     <script src="nav.js?v=2"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-        // Contatos editáveis
-        const contatos = [
-            { id: 1, defaultName: 'Gustavo Almeida Goulart' },
-            { id: 2, defaultName: 'Felipe Quaresma Dos Santos' },
-            { id: 3, defaultName: 'Maria Das Vitorias Pereira Almeida' }
-        ];
-
         function getIniciais(nome) {
             return nome.trim().split(' ').filter(p => p).slice(0, 2).map(p => p[0].toUpperCase()).join('');
         }
@@ -141,8 +133,7 @@
             }
 
             nameEl.style.cursor = 'pointer';
-
-            nameEl.addEventListener('click', function() {
+            nameEl.onclick = function() {
                 const current = nameEl.textContent.trim();
                 const input = document.createElement('input');
                 input.type = 'text';
@@ -167,11 +158,10 @@
 
                 input.addEventListener('blur', save);
                 input.addEventListener('keypress', e => { if (e.key === 'Enter') save(); });
-            });
+            };
         }
 
-        contatos.forEach(c => attachEditable(c.id));
-        }); // fim DOMContentLoaded
+        [1, 2, 3].forEach(id => attachEditable(id));
     </script>
 </body>
 </html>
