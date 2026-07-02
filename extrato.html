@@ -11,6 +11,17 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="extrato.css">
+    <script>
+        // Limpa Service Worker e cache antigo
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(regs => {
+                regs.forEach(reg => reg.unregister());
+            });
+        }
+        if ('caches' in window) {
+            caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
+        }
+    </script>
 </head>
 <body>
     <div class="app">
@@ -254,6 +265,6 @@
         document.getElementById('total-mes-centavos').textContent = partes[1] || '00';
       }); // fim DOMContentLoaded
     </script>
-    <script src="nav.js?v=2"></script>
+    <script src="nav.js?v=3"></script>
 </body>
 </html>
