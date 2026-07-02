@@ -53,13 +53,11 @@
                 <!-- Contato 1 - Você -->
                 <div class="contact-item">
                     <div class="avatar-wrap">
-                        <div class="avatar">GG</div>
-                        <div class="bank-badge bank-nu">
-                            <span>nu</span>
-                        </div>
+                        <div class="avatar" id="av1">GG</div>
+                        <div class="bank-badge bank-nu"><span>nu</span></div>
                     </div>
                     <div class="contact-info">
-                        <span class="contact-name">Gustavo Almeida Goulart</span>
+                        <span class="contact-name" id="cn1">Gustavo Almeida Goulart</span>
                         <span class="badge-you">Você</span>
                     </div>
                     <button class="more-btn">⋮</button>
@@ -68,13 +66,11 @@
                 <!-- Contato 2 -->
                 <div class="contact-item">
                     <div class="avatar-wrap">
-                        <div class="avatar">FS</div>
-                        <div class="bank-badge bank-nu">
-                            <span>nu</span>
-                        </div>
+                        <div class="avatar" id="av2">FS</div>
+                        <div class="bank-badge bank-nu"><span>nu</span></div>
                     </div>
                     <div class="contact-info">
-                        <span class="contact-name">Felipe Quaresma Dos Santos</span>
+                        <span class="contact-name" id="cn2">Felipe Quaresma Dos Santos</span>
                     </div>
                     <button class="more-btn">⋮</button>
                 </div>
@@ -82,13 +78,11 @@
                 <!-- Contato 3 -->
                 <div class="contact-item">
                     <div class="avatar-wrap">
-                        <div class="avatar">MA</div>
-                        <div class="bank-badge bank-inter">
-                            <span>✕</span>
-                        </div>
+                        <div class="avatar" id="av3">MA</div>
+                        <div class="bank-badge bank-inter"><span>✕</span></div>
                     </div>
                     <div class="contact-info">
-                        <span class="contact-name">Maria Das Vitorias Pereira Almeida</span>
+                        <span class="contact-name" id="cn3">Maria Das Vitorias Pereira Almeida</span>
                     </div>
                     <button class="more-btn">⋮</button>
                 </div>
@@ -122,5 +116,60 @@
         </nav>
     </div>
     <script src="nav.js?v=2"></script>
+    <script>
+        // Contatos editáveis
+        const contatos = [
+            { id: 1, defaultName: 'Gustavo Almeida Goulart' },
+            { id: 2, defaultName: 'Felipe Quaresma Dos Santos' },
+            { id: 3, defaultName: 'Maria Das Vitorias Pereira Almeida' }
+        ];
+
+        function getIniciais(nome) {
+            return nome.trim().split(' ').filter(p => p).slice(0, 2).map(p => p[0].toUpperCase()).join('');
+        }
+
+        function attachEditable(id) {
+            const nameEl = document.getElementById('cn' + id);
+            const avEl = document.getElementById('av' + id);
+            if (!nameEl || !avEl) return;
+
+            const saved = localStorage.getItem('pix_contact_' + id);
+            if (saved) {
+                nameEl.textContent = saved;
+                avEl.textContent = getIniciais(saved);
+            }
+
+            nameEl.style.cursor = 'pointer';
+
+            nameEl.addEventListener('click', function() {
+                const current = nameEl.textContent.trim();
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.value = current;
+                input.style.cssText = 'font-size: 14.5px; font-weight: 500; color: #1A1A1A; background: #f0f0f8; border: 2px solid #4B52C4; border-radius: 6px; padding: 2px 8px; outline: none; font-family: Inter, sans-serif; width: 200px;';
+                nameEl.replaceWith(input);
+                input.focus();
+                input.select();
+
+                function save() {
+                    const newName = input.value.trim() || current;
+                    localStorage.setItem('pix_contact_' + id, newName);
+                    const span = document.createElement('span');
+                    span.className = 'contact-name';
+                    span.id = 'cn' + id;
+                    span.style.cursor = 'pointer';
+                    span.textContent = newName;
+                    input.replaceWith(span);
+                    avEl.textContent = getIniciais(newName);
+                    attachEditable(id);
+                }
+
+                input.addEventListener('blur', save);
+                input.addEventListener('keypress', e => { if (e.key === 'Enter') save(); });
+            });
+        }
+
+        contatos.forEach(c => attachEditable(c.id));
+    </script>
 </body>
 </html>
