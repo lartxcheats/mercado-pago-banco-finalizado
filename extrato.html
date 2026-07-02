@@ -116,7 +116,7 @@
     </div>
 
     <script>
-        const nomes = [
+      document.addEventListener('DOMContentLoaded', function() {
             'Ana Clara Oliveira','Bruno Henrique Santos','Camila Ferreira Lima',
             'Diego Alves Costa','Eduarda Martins Souza','Felipe Rocha Pereira',
             'Gabriela Nunes Ribeiro','Henrique Carvalho Gomes','Isabela Teixeira Almeida',
@@ -252,6 +252,7 @@
         const partes = triploStr.split(',');
         document.getElementById('total-mes-reais').textContent = partes[0];
         document.getElementById('total-mes-centavos').textContent = partes[1] || '00';
+      }); // fim DOMContentLoaded
     </script>
     <script src="nav.js"></script>
     </body>
