@@ -245,13 +245,19 @@
 
         renderizar();
 
-        // Atualiza saldo a cada vez que a página é carregada (pode ter sido editado em mp.html)
-        window.addEventListener('pageshow', () => {
+        // Atualiza saldo sempre que volta pra esta página
+        function atualizarSaldo() {
             const totalAtualizado = localStorage.getItem('mp_saldo') || '0,00';
             const partesAtual = totalAtualizado.split(',');
-            document.getElementById('saldo-reais').textContent = partesAtual[0];
-            document.getElementById('saldo-centavos').textContent = partesAtual[1] || '00';
-        });
+            if (!hidden) {
+                document.getElementById('saldo-reais').textContent = partesAtual[0];
+                document.getElementById('saldo-centavos').textContent = partesAtual[1] || '00';
+            }
+        }
+
+        window.addEventListener('pageshow', atualizarSaldo);
+        window.addEventListener('focus', atualizarSaldo);
+        document.addEventListener('visibilitychange', () => { if (!document.hidden) atualizarSaldo(); });
 
         // Título análise com mês atual
         const nomeMesAtual = meses[hoje.getMonth()];
