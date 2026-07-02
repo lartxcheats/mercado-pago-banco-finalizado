@@ -15,12 +15,10 @@
 <body>
     <div class="app">
 
-        <!-- Header -->
         <header class="header">
             <h1 class="title">Pix</h1>
             <div class="header-actions">
                 <button class="pill-btn">
-                    <!-- share/keys icon -->
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#5E42D4" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
                         <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
@@ -29,14 +27,12 @@
                     <span>Chaves</span>
                 </button>
                 <button class="pill-btn">
-                    <!-- pix diamond icon -->
                     <img src="areapix.png" alt="Área Pix" class="pill-icon">
                     <span>Área Pix</span>
                 </button>
             </div>
         </header>
 
-        <!-- Search -->
         <div class="search-row">
             <div class="search-input-wrap" onclick="window.location.href='pix-transferir.html'" style="cursor:pointer;">
                 <input type="text" placeholder="Insira chave, código do Pix ou nome" class="search-input" readonly style="cursor:pointer;">
@@ -46,11 +42,9 @@
             </button>
         </div>
 
-        <!-- Contacts -->
         <div class="contacts-section">
             <h2 class="section-title">Todos os contatos</h2>
             <div class="contact-list">
-                <!-- Contato 1 - Você -->
                 <div class="contact-item">
                     <div class="avatar-wrap">
                         <div class="avatar" id="av1">GG</div>
@@ -62,8 +56,6 @@
                     </div>
                     <button class="more-btn">⋮</button>
                 </div>
-
-                <!-- Contato 2 -->
                 <div class="contact-item">
                     <div class="avatar-wrap">
                         <div class="avatar" id="av2">FS</div>
@@ -74,8 +66,6 @@
                     </div>
                     <button class="more-btn">⋮</button>
                 </div>
-
-                <!-- Contato 3 -->
                 <div class="contact-item">
                     <div class="avatar-wrap">
                         <div class="avatar" id="av3">MA</div>
@@ -89,7 +79,6 @@
             </div>
         </div>
 
-        <!-- Bottom nav -->
         <nav class="bottom-nav">
             <button class="nav-item" onclick="window.location.href='mp.html'">
                 <img src="casinha.png" alt="Conta" class="nav-icon-img">
@@ -115,53 +104,7 @@
             </button>
         </nav>
     </div>
-    <script src="nav.js?v=2"></script>
-    <script>
-        function getIniciais(nome) {
-            return nome.trim().split(' ').filter(p => p).slice(0, 2).map(p => p[0].toUpperCase()).join('');
-        }
-
-        function attachEditable(id) {
-            const nameEl = document.getElementById('cn' + id);
-            const avEl = document.getElementById('av' + id);
-            if (!nameEl || !avEl) return;
-
-            const saved = localStorage.getItem('pix_contact_' + id);
-            if (saved) {
-                nameEl.textContent = saved;
-                avEl.textContent = getIniciais(saved);
-            }
-
-            nameEl.style.cursor = 'pointer';
-            nameEl.onclick = function() {
-                const current = nameEl.textContent.trim();
-                const input = document.createElement('input');
-                input.type = 'text';
-                input.value = current;
-                input.style.cssText = 'font-size: 14.5px; font-weight: 500; color: #1A1A1A; background: #fff; border: 2px solid #4B52C4; border-radius: 6px; padding: 4px 10px; outline: none; font-family: Inter, sans-serif; width: 220px; display: inline-block;';
-                nameEl.replaceWith(input);
-                input.focus();
-                input.select();
-
-                function save() {
-                    const newName = input.value.trim() || current;
-                    localStorage.setItem('pix_contact_' + id, newName);
-                    const span = document.createElement('span');
-                    span.className = 'contact-name';
-                    span.id = 'cn' + id;
-                    span.style.cursor = 'pointer';
-                    span.textContent = newName;
-                    input.replaceWith(span);
-                    avEl.textContent = getIniciais(newName);
-                    attachEditable(id);
-                }
-
-                input.addEventListener('blur', save);
-                input.addEventListener('keypress', e => { if (e.key === 'Enter') save(); });
-            };
-        }
-
-        [1, 2, 3].forEach(id => attachEditable(id));
-    </script>
+    <script src="nav.js?v=3"></script>
+    <script src="editar-nome.js?v=3"></script>
 </body>
 </html>
