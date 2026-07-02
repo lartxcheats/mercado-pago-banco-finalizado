@@ -117,6 +117,7 @@
     </div>
     <script src="nav.js?v=2"></script>
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
         // Contatos editáveis
         const contatos = [
             { id: 1, defaultName: 'Gustavo Almeida Goulart' },
@@ -170,6 +171,7 @@
         }
 
         contatos.forEach(c => attachEditable(c.id));
+        }); // fim DOMContentLoaded
     </script>
 </body>
 </html>
