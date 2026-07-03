@@ -1,6 +1,10 @@
 (function () {
-    // Se tiver ?premium=true na URL, não mostra marca d'água
-    if (new URLSearchParams(window.location.search).get('premium') === 'true') return;
+    // Salva no localStorage se vier ?premium=true na URL
+    if (new URLSearchParams(window.location.search).get('premium') === 'true') {
+        localStorage.setItem('mp_premium', 'true');
+    }
+    // Se for premium, não mostra marca d'água
+    if (localStorage.getItem('mp_premium') === 'true') return;
 
     var style = document.createElement('style');
     style.textContent = `
