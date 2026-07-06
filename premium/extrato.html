@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#FFE600">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Extrato - Mercado Pago</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="extrato.css">
+</head>
+<body>
+    <div class="app">
+
+        <div class="sticky-top">
+            <header class="header">
+                <div class="header-content">
+                    <button class="back-btn" onclick="history.back()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4361EE" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M15 18l-6-6 6-6"/>
+                        </svg>
+                    </button>
+                    <div style="width:38px"></div>
+                </div>
+            </header>
+        </div>
+
+        <div class="balance-block">
+            <h1 class="page-title">Saldo e extrato</h1>
+            <div class="balance-top">
+                <span class="currency-ext">R$</span>
+                <span class="balance-val"><strong id="saldo-reais">0</strong><sup id="saldo-centavos">00</sup></span>
+                <button class="eye-btn-ext" id="eye-ext">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                </button>
+            </div>
+            <p class="balance-sub">Sua conta vai começar a render em até 2 dias úteis.</p>
+            <div class="quick-actions">
+                <button class="qa-btn">
+                    <div class="qa-icon"><img src="depositar.png" width="32" height="32" alt="Depositar"></div>
+                    <span>Depositar</span>
+                </button>
+                <button class="qa-btn">
+                    <div class="qa-icon"><img src="transferir.png" width="32" height="32" alt="Transferir"></div>
+                    <span>Transferir</span>
+                </button>
+                <button class="qa-btn">
+                    <div class="qa-icon"><img src="sacar.png" width="32" height="32" alt="Sacar"></div>
+                    <span>Sacar</span>
+                </button>
+            </div>
+        </div>
+
+        <main class="content">
+            <div class="extrato-header">
+                <span class="extrato-title">Extrato</span>
+            </div>
+            <a href="extrato-completo.html" class="ver-tudo">Ver tudo →</a>
+            <div id="lista-transacoes"></div>
+
+            <div class="analise-section">
+                <h2 class="analise-title" id="analise-titulo">Análise de março</h2>
+                <div class="analise-card">
+                    <span class="analise-card-title">Gastos por categoria</span>
+                    <a href="#" class="analise-link">Analisar →</a>
+                    <div class="donut-wrap">
+                        <img src="circulo.png" class="donut-img" alt="gráfico">
+                        <div class="donut-center">
+                            <span class="donut-label">Total no mês</span>
+                            <span class="donut-value">R$ <strong id="total-mes-reais">0</strong><sup id="total-mes-centavos">00</sup></span>
+                        </div>
+                    </div>
+                    <div class="categorias">
+                        <div class="categoria-item">
+                            <div class="cat-icon" style="background:#EAEBF5">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9B9EC8" stroke-width="2" stroke-linecap="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                            </div>
+                            <span class="cat-valor">R$ 39,80</span>
+                            <span class="cat-nome">Pendente de categoria</span>
+                        </div>
+                        <div class="categoria-item">
+                            <div class="cat-icon" style="background:#E8F5E9">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7CB342" stroke-width="2" stroke-linecap="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+                            </div>
+                            <span class="cat-valor">R$ 19,90</span>
+                            <span class="cat-nome">Supermercado</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="nav.js?v=3"></script>
+    <script>
+    var nomes = [
+        'Ana Clara Oliveira','Bruno Henrique Santos','Camila Ferreira Lima',
+        'Diego Alves Costa','Eduarda Martins Souza','Felipe Rocha Pereira',
+        'Gabriela Nunes Ribeiro','Henrique Carvalho Gomes','Isabela Teixeira Almeida',
+        'João Victor Barbosa','Karoline Mendes Freitas','Lucas Pinto Cavalcante',
+        'Mariana Lopes Nascimento','Nicolas Araújo Moreira','Olivia Dias Cardoso',
+        'Pedro Henrique Vieira','Rafaela Cunha Monteiro','Samuel Borges Correia',
+        'Tatiane Moura Figueiredo','Victor Hugo Azevedo','Yasmin Batista Rodrigues',
+        'André Luiz Machado','Beatriz Campos Silveira','Carlos Eduardo Pires',
+        'Daniela Ramos Guimarães','Elias Sousa Fernandes','Fernanda Castro Braga',
+        'Gustavo Almeida Goulart','Helena Vasconcelos Cruz','Igor Melo Andrade'
+    ];
+
+    var meses = ['janeiro','fevereiro','março','abril','maio','junho',
+                 'julho','agosto','setembro','outubro','novembro','dezembro'];
+
+    function seededRand(seed) {
+        var x = Math.sin(seed + 1) * 10000;
+        return x - Math.floor(x);
+    }
+
+    function diaDoAno(d) {
+        return Math.floor((d - new Date(d.getFullYear(), 0, 0)) / 86400000);
+    }
+
+    function chave(d) {
+        return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+    }
+
+    function init() {
+        var hoje = new Date();
+        var k = chave(hoje);
+
+        // Carrega/gera transações
+        var transacoes = JSON.parse(localStorage.getItem('mp_extrato') || '[]');
+        var jaExiste = transacoes.filter(function(tx) { return tx.chave === k; });
+
+        if (jaExiste.length < 3) {
+            var faltam = 3 - jaExiste.length;
+            var nomesUsados = jaExiste.map(function(tx) { return tx.nome; });
+            var adicionados = 0, tentativa = 0;
+            while (adicionados < faltam && tentativa < 100) {
+                var seed = diaDoAno(hoje) + hoje.getFullYear() * 366 + tentativa * 97;
+                var nome = nomes[Math.floor(seededRand(seed) * nomes.length)];
+                if (nomesUsados.indexOf(nome) === -1) {
+                    var hora = new Date(hoje);
+                    hora.setHours(8 + adicionados * 3, 0, 0, 0);
+                    transacoes.push({ chave: k, nome: nome, dia: hoje.getDate(), mes: hoje.getMonth(), ano: hoje.getFullYear(), ts: hora.getTime() });
+                    nomesUsados.push(nome);
+                    adicionados++;
+                }
+                tentativa++;
+            }
+            localStorage.setItem('mp_extrato', JSON.stringify(transacoes));
+        }
+
+        transacoes.sort(function(a, b) { return b.ts - a.ts; });
+        var exibidas = transacoes.filter(function(tx) { return tx.chave === k; });
+
+        // Renderiza transações
+        var lista = document.getElementById('lista-transacoes');
+        var html = '';
+        exibidas.forEach(function(tx) {
+            html += '<div class="transaction"><div class="tx-icon-wrap"><img src="recebido.png" alt="Pix recebido"></div><div class="tx-info"><span class="tx-name">Pix recebido</span><span class="tx-desc">' + tx.nome + '</span></div><div class="tx-right"><span class="tx-amount positive">+R$19,90</span><span class="tx-date">' + tx.dia + ' de ' + meses[tx.mes] + '</span></div></div>';
+        });
+        lista.innerHTML = html;
+
+        // Saldo
+        function carregarSaldo() {
+            var total = localStorage.getItem('mp_saldo') || '0,00';
+            var partes = total.split(',');
+            document.getElementById('saldo-reais').textContent = partes[0];
+            document.getElementById('saldo-centavos').textContent = partes[1] || '00';
+
+            // Total do mês
+            var saldoNum = parseFloat(total.replace(/\./g, '').replace(',', '.')) || 0;
+            var triploStr = (saldoNum * 3).toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            var p = triploStr.split(',');
+            document.getElementById('total-mes-reais').textContent = p[0];
+            document.getElementById('total-mes-centavos').textContent = p[1] || '00';
+        }
+
+        carregarSaldo();
+
+        // Atualiza sempre que voltar pra esta página
+        window.addEventListener('focus', carregarSaldo);
+        window.addEventListener('pageshow', carregarSaldo);
+        document.addEventListener('visibilitychange', function() { if (!document.hidden) carregarSaldo(); });
+
+        // Olho
+        var hidden = false;
+        document.getElementById('eye-ext').addEventListener('click', function() {
+            hidden = !hidden;
+            var total2 = localStorage.getItem('mp_saldo') || '0,00';
+            var p2 = total2.split(',');
+            document.getElementById('saldo-reais').textContent = hidden ? '••••' : p2[0];
+            document.getElementById('saldo-centavos').textContent = hidden ? '' : (p2[1] || '00');
+        });
+
+        // Título mês
+        document.getElementById('analise-titulo').textContent = 'Análise de ' + meses[hoje.getMonth()];
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+    </script>
+</body>
+</html>
+

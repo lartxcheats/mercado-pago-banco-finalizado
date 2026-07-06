@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Transferir via Pix</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: Inter, sans-serif; background: #fff; color: #1A1A1A; }
+        .app { max-width: 430px; margin: 0 auto; min-height: 100vh; padding: calc(16px + env(safe-area-inset-top)) 20px 40px; }
+
+        .back-btn {
+            width: 48px; height: 48px;
+            background: #EEF0FF;
+            border: none; border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; margin-bottom: 32px;
+        }
+
+        .field-wrap {
+            border: 2px solid #4361EE;
+            border-radius: 14px;
+            padding: 16px 18px;
+            margin-bottom: 20px;
+        }
+
+        .field-wrap input {
+            width: 100%; border: none; outline: none;
+            font-size: 16px; font-family: Inter, sans-serif;
+            color: #1A1A1A; background: transparent;
+        }
+
+        .field-wrap input::placeholder { color: #BDBDBD; }
+
+        .agency-link {
+            color: #4361EE; font-size: 15px; font-weight: 600;
+            text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
+        }
+
+        .resultado-pix {
+            background: #F8F9FA;
+            border: 1.5px solid #E8E8E8;
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 20px;
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .resultado-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+
+        .resultado-avatar {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4361EE 0%, #7C3AED 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .resultado-info h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1A1A1A;
+            margin-bottom: 4px;
+        }
+
+        .resultado-info p {
+            font-size: 13px;
+            color: #888;
+        }
+
+        .instituicao-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #EEF0FF;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #4361EE;
+        }
+
+        .btn-confirmar {
+            width: 100%;
+            background: #4361EE;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .btn-confirmar:active {
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <button class="back-btn" onclick="history.back()">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4361EE" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 12H5M12 5l-7 7 7 7"/>
+            </svg>
+        </button>
+
+        <div class="field-wrap">
+            <input type="text" placeholder="CPF, telefone, e-mail ou chave aleatória" autofocus id="pix-input">
+        </div>
+
+        <div id="resultado" class="resultado-pix">
+            <div class="resultado-header">
+                <div class="resultado-avatar" id="avatar">AB</div>
+                <div class="resultado-info">
+                    <h3 id="nome-destinatario">Nome do destinatário</h3>
+                    <p id="cpf-destinatario">CPF: ***.***.***-**</p>
+                </div>
+            </div>
+            <div class="instituicao-badge">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+                <span id="banco">Banco Mercado Pago</span>
+            </div>
+            <button class="btn-confirmar">Continuar</button>
+        </div>
+
+        <div id="sugestao" style="display:none; align-items:center; gap:14px; padding: 14px 4px; color: #888; font-size: 13px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+            </svg>
+            <span>Digite CPF (11 dígitos), telefone ou e-mail</span>
+        </div>
+
+        <a href="#" class="agency-link">Usar agência e conta →</a>
+    </div>
+    <script src="nav.js"></script>
+    <script>
+        const nomes = [
+            'Ana Clara Oliveira', 'Bruno Henrique Santos', 'Camila Ferreira Lima',
+            'Diego Alves Costa', 'Eduarda Martins Souza', 'Felipe Rocha Pereira',
+            'Gabriela Nunes Ribeiro', 'Henrique Carvalho Gomes', 'Isabela Teixeira Almeida',
+            'João Victor Barbosa', 'Karoline Mendes Freitas', 'Lucas Pinto Cavalcante',
+            'Mariana Lopes Nascimento', 'Nicolas Araújo Moreira', 'Olivia Dias Cardoso',
+            'Pedro Henrique Vieira', 'Rafaela Cunha Monteiro', 'Samuel Borges Correia',
+            'Tatiane Moura Figueiredo', 'Victor Hugo Azevedo', 'Yasmin Batista Rodrigues',
+            'André Luiz Machado', 'Beatriz Campos Silveira', 'Carlos Eduardo Pires',
+            'Daniela Ramos Guimarães', 'Elias Sousa Fernandes', 'Fernanda Castro Braga',
+            'Gustavo Almeida Goulart', 'Helena Vasconcelos Cruz', 'Igor Melo Andrade'
+        ];
+
+        const bancos = [
+            'Banco Mercado Pago', 'Nubank', 'Inter', 'Banco do Brasil',
+            'Bradesco', 'Itaú', 'Caixa Econômica', 'Santander', 'C6 Bank', 'PicPay'
+        ];
+
+        const input = document.getElementById('pix-input');
+        const sugestao = document.getElementById('sugestao');
+        const resultado = document.getElementById('resultado');
+        const avatar = document.getElementById('avatar');
+        const nomeEl = document.getElementById('nome-destinatario');
+        const cpfEl = document.getElementById('cpf-destinatario');
+        const bancoEl = document.getElementById('banco');
+
+        function formatCPF(cpf) {
+            return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+        }
+
+        function formatPhone(phone) {
+            if (phone.length === 11) {
+                return phone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+            }
+            return phone.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+        }
+
+        function hashString(str) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                hash = ((hash << 5) - hash) + str.charCodeAt(i);
+                hash = hash & hash;
+            }
+            return Math.abs(hash);
+        }
+
+        function buscarDestinatario(chave) {
+            const hash = hashString(chave);
+            const nome = nomes[hash % nomes.length];
+            const banco = bancos[hash % bancos.length];
+            const iniciais = nome.split(' ').map(n => n[0]).slice(0, 2).join('');
+            
+            return { nome, banco, iniciais };
+        }
+
+        input.addEventListener('input', () => {
+            const val = input.value.trim();
+            const numeros = val.replace(/\D/g, '');
+            
+            if (numeros.length === 0 && !val.includes('@')) {
+                sugestao.style.display = 'flex';
+                resultado.style.display = 'none';
+            } else if (val.includes('@')) {
+                // É um e-mail
+                buscarPorChave(val, 'E-mail: ' + val);
+            } else if (numeros.length === 11) {
+                // Telefone ou CPF?
+                const ddd = numeros.substring(0, 2);
+                const terceiro = numeros[2];
+                
+                // Se DDD válido (11-99) e terceiro dígito 9 = telefone
+                if (parseInt(ddd) >= 11 && parseInt(ddd) <= 99 && terceiro === '9') {
+                    buscarPorChave(numeros, 'Celular: ' + formatPhone(numeros));
+                } else {
+                    // É CPF
+                    buscarPorChave(numeros, 'CPF: ' + formatCPF(numeros));
+                }
+            } else {
+                sugestao.style.display = 'flex';
+                resultado.style.display = 'none';
+            }
+        });
+
+        function buscarPorChave(chave, tipoTexto) {
+            // Mostra loading
+            avatar.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="10" opacity="0.3"/><path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"><animateTransform attributeName="transform" type="rotate" from="0 12 12" to="360 12 12" dur="1s" repeatCount="indefinite"/></path></svg>';
+            nomeEl.textContent = 'Buscando dados...';
+            cpfEl.textContent = tipoTexto;
+            bancoEl.textContent = 'Aguarde...';
+            sugestao.style.display = 'none';
+            resultado.style.display = 'block';
+
+            // Fica carregando eternamente (simula internet lenta)
+        }
+
+        async function buscarCPFReal(cpf) {
+            buscarPorChave(cpf, 'CPF: ' + formatCPF(cpf));
+        }
+
+        function mostrarResultado(dados, chaveTipo) {
+            avatar.textContent = dados.iniciais;
+            nomeEl.textContent = dados.nome;
+            cpfEl.textContent = chaveTipo;
+            bancoEl.textContent = dados.banco;
+            sugestao.style.display = 'none';
+            resultado.style.display = 'block';
+        }
+
+        // Mostra dica inicial
+        sugestao.style.display = 'flex';
+    </script>
+    </body>
+</html>
+
